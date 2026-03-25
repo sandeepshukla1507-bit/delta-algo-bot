@@ -1,0 +1,23 @@
+name: Delta Bot Run
+on:
+  schedule:
+    - cron: '*/30 * * * *' # हर 30 मिनट में खुद चलेगा
+  workflow_dispatch:      # हाथ से चलाने के लिए बटन
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Install CCXT
+        run: pip install ccxt
+      - name: Run Bot
+        env:
+          DELTA_API_KEY: ${{ secrets.DELTA_API_KEY }}
+          DELTA_API_SECRET: ${{ secrets.DELTA_API_SECRET }}
+        run: python bot.py
